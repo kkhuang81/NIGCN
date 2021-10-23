@@ -17,4 +17,4 @@ python multiclass.py --dataset reddit --batch 1024 --rr 0.5 --weight_decay 0 --s
 python multilabel.py --dataset amazon --batch 100000 --epsilon 0.0064 --rr 0.5 --weight_decay 0 --seed 25190 --level 4 --dropout 0.4 --alpha 0.7 --lr 0.01 --nlayer 4 --epochs 1000 --hid 512 --dev 1 --patience 100 --type $type
 
 # idx = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
-python multilabel.py --dataset amazon --batch 100000 --epsilon 0.0064 --rr 0.5 --weight_decay 0 --seed 25190 --level 4 --dropout 0.4 --alpha 0.7 --lr 0.01 --nlayer 4 --epochs 1000 --hid 512 --dev 1 --patience 100 --type $type
+python papers100M.py --dataset papers100M --batch 10000 --epsilon 0.04 --rr 0.5 --seed 25190 --dropout 0.1 --lamb 6 --hid 512 --dev 1 --patience 400 --weight_decay 5e-4 --level 4 --lr 0.01 --nlayers 1 --type $type --idx $idx
