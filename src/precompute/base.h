@@ -60,7 +60,7 @@ public:
         for (int idx = start; idx < end;idx++)
         {
             auto snode = targetset[idx];
-            record->Push(snode, weights[0]);            
+            record->Push(snode, weights[0]);
             uint node;
             for (uint rw = 0;rw < rwsize;rw++)
             {
@@ -68,13 +68,14 @@ public:
                 for (int L = 1;L <= level;L++)
                 {
                     node = el[pl[node] + xorshf96() % deg[node]];
-                    record->Push(node, weights[L] / (double)rwsize);                    
-                }
-            }
+                    record->Push(node, weights[L] / (double)rwsize);
+                }		
+                if (record->KeyNumber > 1.0 / epsilon / epsilon)break;                                                                                                       
+            }            
             while (record->KeyNumber > 0)
             {
                 auto Node_Wei = record->Pop();
-                int node = Node_Wei.first;                
+                int node = Node_Wei.first;
                 double weight = Node_Wei.second;
                 for (int k = 0;k < ncols;k++)newFeat[idx][k] += feature[node][k] * weight;
             }

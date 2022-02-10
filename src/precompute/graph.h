@@ -18,6 +18,7 @@ public:
     double alpha;
     double epsilon;    
     double rrr;      
+    double wgtsum;
     vector<int>targetset;
     int setSize, ncols;
     uint nrows;
@@ -27,7 +28,7 @@ public:
     uint rwsize;
 
     vector<int>deg;
-    string dataset;    
+    string dataset;        
 
     Graph(string dataStr, uint nn, uint mm, int thrdnum, int Lel, double lamb, double alph, double eps, double rrz, int size, string TS)
     {
@@ -42,10 +43,12 @@ public:
         m = mm;
         el = vector<uint>(m);
         pl = vector<uint>(n + 1);
+        
         LoadGraph();
         if (dataStr.find("papers100M") != string::npos)LoadPapersFeatures();
-        else LoadFeatures();      
-        setSize = size;
+        else LoadFeatures();
+        
+        setSize = size;        
         string s;
         int i = 0;       
 
@@ -58,9 +61,9 @@ public:
             targetset[i++] = stoi(s);
         }  
         weights = vector<double>(level+1, 0);
-        double wgtsum = 0;
+        
         if (lambda < 1.0)        
-        {
+        {        
             weights[0] = alpha;
             wgtsum = weights[0];
             for (int i = 1;i <= level;i++)
@@ -70,21 +73,24 @@ public:
             }
         }                
         else
-        {
-            weights[0] = exp(-lambda);
+        {            
+            weights[0] = exp(-lambda);            
             wgtsum = weights[0];
             for (int i = 1;i <= level;i++)
             {
                 weights[i] = weights[i - 1] * lambda / (double)i;
                 wgtsum += weights[i];
-            }
+            }         
         }
-        double delta = 0.01;
-        rwsize = 8.0 * log(wgtsum / epsilon / delta) / epsilon + 1; //failure probability 1%
+        cout << "required neighbor no.: " << 1.0 / epsilon / epsilon << endl;
+        cout << "Wgtsum.: " << wgtsum << endl;
+        double delta = 0.01;        
+	    rwsize = 8.0 * log(wgtsum / epsilon / delta) / epsilon + 1; //failure probability 1%
+        cout << "random walk size: " << rwsize << " node num:" << n << endl;
     }
 
     void LoadGraph()
-    {               
+    {                
         string dataset_el = dataset + "_adj_el.txt";
         const char* p1 = dataset_el.c_str();
         if (FILE* f1 = fopen(p1, "rb"))
@@ -113,8 +119,7 @@ public:
         {
             cout << dataset_pl << " Not Exists." << endl;
             exit(1);
-        }
-        
+        }        
         deg = vector<int>(n, 0);
         for (uint i = 0;i < n;i++)
             deg[i] = pl[i + 1] - pl[i];        
@@ -166,13 +171,13 @@ public:
         {
             cout << dataset_feat << " Not Exists." << endl;
             exit(1);
-        }        
+        }
         double d = 0.0;
         for (uint i = 0; i < nrows; i++)
         {
             if (deg[i] == 0) continue;
             d = pow((double)deg[i], rrr);
-            for (int j = 0;j < ncols;j++)feature[i][j] /= d;            
+            for (int j = 0;j < ncols;j++)feature[i][j] /= d;
         }
         cout << "Papers100M feature Loaded" << endl;
     }

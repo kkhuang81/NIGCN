@@ -13,17 +13,9 @@ from models import GCN
 import uuid
 import os
 
-# Training settings
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="cora",help='Dataset to use.')
-
 parser.add_argument('--seed', type=int, default=51290, help='Random seed.')
-'''
-parser.add_argument('--trainnum', type=int, default=20, help='number of train number')
-parser.add_argument('--valnum', type=int, default=500, help='number of validation number')
-parser.add_argument('--testnum', type=int, default=1000, help='number of test number')
-parser.add_argument('--seq', type=int, default=0, help='the sequence of splits')
-'''
 parser.add_argument('--type', type=int, default=0, help='the type of the split')
 
 parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs to train.')
@@ -81,28 +73,12 @@ def evaluate(model,feats,labels):
 
 def validate():
     return evaluate(model, feature_valtest[:len_val].cuda(args.dev), label_valtest[:len_val])
-    '''
-    model.eval()
-    with torch.no_grad():
-        output = model(feature_valtest[:len_val])
-        micro_val = mutilabel_f1(output, label_valtest[:len_val])
-        return micro_val.item()
-    '''
 
 def test():
     model.load_state_dict(torch.load(checkpt_file))
-    return evaluate(model, feature_valtest[len_val:].cuda(args.dev), label_valtest[len_val:])
-    '''
-    model.eval()
-    with torch.no_grad():
-        output = model(feature_valtest[len_val:])
-        micro_test = mutilabel_f1(output, label_valtest[len_val:])
-        return micro_test.item()
-    '''
+    return evaluate(model, feature_valtest[len_val:].cuda(args.dev), label_valtest[len_val:])    
 
-
-settings=['_5_125_250', '_10_250_500', '_15_375_750', '_20_500_1000']
-#for setting in settings:
+settings=['_9_225_450', '_17_425_850', '_35_875_1750', '_69_1725_3450', '_86_2150_4300', '_173_4325_8650', '_431_10775_21550']
 training_time=[]
 test_f1score=[]
 for idx in range(10):
@@ -113,7 +89,6 @@ for idx in range(10):
 
     print("class no.: ", label_train.shape[1])
 
-    # Model and optimizer
     model = GCN(nfeat=feature_train.shape[1],
                 nlayers=args.nlayers,
                 nhidden=args.hid,
@@ -141,7 +116,6 @@ for idx in range(10):
     best = 0
     best_epoch = 0
 
-    # when the trianing data is not sufficient enough, set the patience value small in case of overfitting.
     for epoch in range(args.epochs):
         loss_tra,train_ep = train()
         f1_val = validate()

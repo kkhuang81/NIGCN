@@ -25,6 +25,11 @@ typedef unsigned int uint;
 #define ClearBit(A, k)   ( A[(k/32)] &= ~(1 << (k%32)) )
 #define TestBit(A, k)    ( A[(k/32)] & (1 << (k%32)) )
 
+/*
+#define DSetBit(A, k, j, n)     ( A[(k*(n/32)+(j/32))] |= (1 << (((k%32)*(n%32))%32+j%32)%32) )
+#define DClearBit(A, k, j, n)   ( A[(k*(n/32)+(j/32))] &= ~(1 << (((k%32)*(n%32))%32+j%32)%32) )
+#define DTestBit(A, k, j, n)    ( A[(k*(n/32)+(j/32))] & (1 << (((k%32)*(n%32))%32+j%32)%32) )
+*/
 using namespace std;
 
 class Node_Set {
@@ -85,8 +90,6 @@ public:
     }
     KeyNumber = 0;
   }
-
 };
-
 
 #endif

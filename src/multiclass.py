@@ -13,10 +13,8 @@ from models import GCN
 import uuid
 import os
 
-# Training settings
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="cora",help='Dataset to use.')
-
 parser.add_argument('--seed', type=int, default=51290, help='Random seed.')
 
 parser.add_argument('--type', type=int, default=0, help='the type of the split')
@@ -82,19 +80,14 @@ def test():
 
 
 settings=['_5_125_250', '_10_250_500', '_15_375_750', '_20_500_1000']
-#for setting in settings:
 training_time=[]
 test_f1score=[]
-#for idx in range(10):
 for idx in range(10):
     splitfile = settings[args.type] + '_' + str(idx) + '_splits.npz'
-    
-    feature_train, feature_valtest, label_train, label_valtest, len_val = load_inductive(args.dataset, args.lamb, args.alpha, args.epsilon, args.level, args.rr, args.opt, splitfile)    
+    feature_train, feature_valtest, label_train, label_valtest, len_val = load_inductive(args.dataset, args.lamb, args.alpha, args.epsilon, args.level, args.rr, args.opt, splitfile)
 
     checkpt_file = 'pretrained/'+uuid.uuid4().hex+'.pt'
 
-
-    # Model and optimizer
     model = GCN(nfeat=feature_train.shape[1],
                 nlayers=args.nlayers,
                 nhidden=args.hid,

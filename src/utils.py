@@ -5,7 +5,6 @@ import torch
 import sys
 import pickle as pkl
 import networkx as nx
-#from normalization import fetch_normalization, row_normalize
 from time import perf_counter
 import random
 import PPR
@@ -31,9 +30,7 @@ def load_citation(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6,
 
     nodestr=""
     for x in nodelist:
-        nodestr+=" "+str(x)
-    # feature update
-    #features=PPR.ppr(dataset_str, level, alpha, epsilon, rr, 2, nodestr[3:6], seed, opt, thread)
+        nodestr+=" "+str(x)    
     node_num=0
     edge_num=0    
     if dataset_name == "cora":
@@ -50,9 +47,8 @@ def load_citation(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6,
         edge_num=3339184668    
     
     
-    features=PPR.ppr(dataset_str, node_num, edge_num, level, lamb, alpha, epsilon, rr, len(nodelist), nodestr[1:], opt)
-    features = torch.FloatTensor(np.array(features))
-
+    features=PPR.ppr(dataset_str, node_num, edge_num, level, lamb, alpha, epsilon, rr, len(nodelist), nodestr[1:], opt)    
+    features = torch.FloatTensor(np.array(features))    
     if dataset_name=="papers100M":
         trainlist=[]
         trainmap=np.load(dataset_str+'_trainIDmap.npy', allow_pickle=True).item()
@@ -66,16 +62,14 @@ def load_citation(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6,
     gc.collect()
 
 
-    labels = torch.LongTensor(label_trivaltest)    
-   
+    labels = torch.LongTensor(label_trivaltest)        
     return features, labels, len(idx_train), len(idx_val), len(idx_test)
 
 def load_inductive(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6, rr=0.5, opt=True, splitfile=""):    
     dataset_str = 'data/' + dataset_name +'/'+dataset_name
     data = np.load(dataset_str + '_labels.npz')
     labels=data['labels']
-
-    #split=np.load(dataset_str+'_'+str(TriNum)+'_'+str(ValNum)+'_'+str(TstNum)+'_'+str(seq)+'_splits.npz')
+    
     print(dataset_str+splitfile)
     split=np.load(dataset_str+splitfile)
     files = []
@@ -83,8 +77,6 @@ def load_inductive(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6
         files.append(split[x])
     idx_train, idx_val, idx_test = tuple(files)
 
-    #idx_train=idx_train[:1]
-    # training graph
     trainlist=[]
     trainmap=np.load(dataset_str+'_trainIDmap.npy', allow_pickle=True).item()
   
@@ -100,7 +92,10 @@ def load_inductive(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6
     edge_num=0
     if dataset_name == "ogbnarxiv":
         node_num=87599
-        edge_num=825665       
+        edge_num=825665 
+    if dataset_name == "yelp":
+        node_num=537635
+        edge_num=7949403       
     if dataset_name == "reddit":
         node_num=151701
         edge_num=10904939        
@@ -112,28 +107,26 @@ def load_inductive(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6
     feature_train = torch.FloatTensor(np.array(feature_train))
 
     print(feature_train.shape)
-    #print('feat: ',feature_train[0][:10])        
-
-    # whole graph
+    
     nodelist=[x for x in idx_val]+ [x for x in idx_test]
     nodestr=""
     for x in nodelist:
         nodestr+=" "+str(x)
-
     if dataset_name == "ogbnarxiv":
         node_num=169343
-        edge_num=2484941  
+        edge_num=2484941
+    if dataset_name == "yelp":
+        node_num=716847
+        edge_num=13954819    
     if dataset_name == "reddit":
         node_num=232965
         edge_num=23446803        
     if dataset_name == "amazon":
         node_num=1569960
         edge_num=264339468   
-    #print('val+test: ', len(nodelist))    
     features_valtest=PPR.ppr(dataset_str, node_num, edge_num, level, lamb, alpha, epsilon, rr, len(nodelist), nodestr[1:], opt)
 
     features_valtest = torch.FloatTensor(np.array(features_valtest))
-
 
     label_train=labels[idx_train]
     label_valtest=labels[nodelist]
@@ -141,7 +134,6 @@ def load_inductive(dataset_name="cora", lamb=0, alpha=0.1, epsilon=0.01, level=6
     gc.collect()
     label_train=torch.LongTensor(label_train)
     label_valtest=torch.LongTensor(label_valtest)
-
 
     return feature_train, features_valtest, label_train, label_valtest, len(idx_val)
 

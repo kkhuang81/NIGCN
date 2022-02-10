@@ -16,7 +16,6 @@ import os
 # Training settings
 parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="cora",help='Dataset to use.')
-
 parser.add_argument('--seed', type=int, default=51290, help='Random seed.')
 parser.add_argument('--type', type=int, default=0, help='the type of the split')
 parser.add_argument('--idx', type=int, default=0, help='the index of the split')
@@ -25,11 +24,9 @@ parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs t
 parser.add_argument('--patience', type=int, default=100, help='Number of epochs to train.')
 parser.add_argument('--lr', type=float, default=0.0001, help='Initial learning rate.')
 parser.add_argument('--weight_decay', type=float, default=0, help='Weight decay (L2 loss on parameters).')
-
 parser.add_argument('--dev', type=int, default=0, help='device id')
 parser.add_argument('--hid', type=int, default=64, help='Number of hidden units.')
 parser.add_argument('--nlayers', type=int, default=2, help='Number of hidden layers.')
-
 parser.add_argument('--bias', default='none', help='bias.')
 parser.add_argument('--batch', type=int, default=64, help='batch size')
 parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate (1 - keep probability).')
@@ -118,11 +115,9 @@ def test(labels):
 		torch.cuda.empty_cache()
 		return micro_val.item()
 
+# Load data
 settings=['_5_125_250', '_10_250_500', '_15_375_750', '_20_500_1000']
-#for setting in settings:
-
 splitfile = settings[args.type] + '_' + str(args.idx) + '_splits.npz'
-#t=time.time()
 features, labels, len_train, len_val, len_test = load_citation(args.dataset, args.lamb, args.alpha, args.epsilon, args.level, args.rr, args.opt, splitfile)
 print(features.shape, labels.shape, len_train, len_val, len_test)
 
