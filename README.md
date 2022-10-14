@@ -1,6 +1,6 @@
 # Node-wise Diffusion for Scalable Graph Learning
 
-This repository contains the codes of GTR and GTRO, data process, and split generation codes.
+This repository contains the codes of NIGCN, data process, and split generation codes.
 
 ## Requirements
 - CUDA 10.1.243
