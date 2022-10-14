@@ -14,7 +14,7 @@ import gc
 
  
 def load_citation(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, splitfile=""):    
-    dataset_str = '/home/huangkk/data/' + dataset_name +'/'+dataset_name
+    dataset_str = 'datapath' + dataset_name +'/'+dataset_name
     #data = np.load(dataset_str + '_5shot_0type_500_1000_labels.npz')
     #print(dataset_str)
     data = np.load(dataset_str + '_labels.npz')
@@ -23,12 +23,6 @@ def load_citation(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, splitf
     else:
         labels = data['labels']
     
-    '''
-    idx_train=data['train_idx']
-    idx_val=data['val_idx']
-    idx_test=data['test_idx']
-
-    '''
     split=np.load(dataset_str+splitfile)
     files = []
     for x in split.files:
@@ -59,17 +53,9 @@ def load_citation(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, splitf
     
     
     features=PPR.ppr(dataset_str, node_num, edge_num, ome, tau, epsilon, rho, len(nodelist), nodestr[1:])
-    #debug
-    #features=PPR.ppr(dataset_str, node_num, edge_num, level, lamb, alpha, epsilon, rr, 1, nodestr[1:], opt)
-    ##exit(1)
-    #debug end
+
     features = torch.FloatTensor(np.array(features))
-    '''
-    #debug mode
-    feat=np.load(dataset_str + '_feat64.npy')
-    features=feat[nodelist]
-    features = torch.FloatTensor(np.array(features))
-    '''
+
     if dataset_name=="papers100M":
         trainlist=[]
         trainmap=np.load(dataset_str+'_trainIDmap.npy', allow_pickle=True).item()
@@ -84,13 +70,11 @@ def load_citation(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, splitf
 
 
     labels = torch.LongTensor(label_trivaltest)    
-    #idx_train = torch.LongTensor(idx_train)
-    #idx_val = torch.LongTensor(idx_val)
-    #idx_test = torch.LongTensor(idx_test)    
+
     return features, labels, len(idx_train), len(idx_val), len(idx_test)
 
 def load_inductive(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, splitfile=""):    
-    dataset_str = '/home/huangkk/data/' + dataset_name +'/'+dataset_name
+    dataset_str = 'datapath' + dataset_name +'/'+dataset_name
     data = np.load(dataset_str + '_labels.npz')
     labels=data['labels']
 
@@ -156,13 +140,11 @@ def load_inductive(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, split
     if dataset_name == "amazon":
         node_num=1569960
         edge_num=264339468   
-    #print('val+test: ', len(nodelist))    
+ 
     features_valtest=PPR.ppr(dataset_str, node_num, edge_num, ome, tau, epsilon, rho, len(nodelist), nodestr[1:])
 
     features_valtest = torch.FloatTensor(np.array(features_valtest))
-    #print(features.shape)
-    #print(features[0])
-    #np.save('corafeatnew',features)
+
 
     label_train=labels[idx_train]
     label_valtest=labels[nodelist]
@@ -171,10 +153,6 @@ def load_inductive(dataset_name="cora", ome=1, tau=1, epsilon=0.01, rho=1, split
     label_train=torch.LongTensor(label_train)
     label_valtest=torch.LongTensor(label_valtest)
 
-    #labels = torch.LongTensor(labels)    
-    #idx_train = torch.LongTensor(idx_train)
-    #idx_val = torch.LongTensor(idx_val)
-    #idx_test = torch.LongTensor(idx_test)    
     return feature_train, features_valtest, label_train, label_valtest, len(idx_val)
 
 def accuracy(output, labels):
