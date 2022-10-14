@@ -2818,16 +2818,6 @@ namespace swig {
 #include "precompute/Propagation.h"
 
 
-#include <limits.h>
-#if !defined(SWIG_NO_LLONG_MAX)
-# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
-#   define LLONG_MAX __LONG_LONG_MAX__
-#   define LLONG_MIN (-LLONG_MAX - 1LL)
-#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
-# endif
-#endif
-
-
 SWIGINTERN int
 SWIG_AsVal_double (PyObject *obj, double *val)
 {
@@ -2872,6 +2862,16 @@ SWIG_AsVal_double (PyObject *obj, double *val)
 #endif
   return res;
 }
+
+
+#include <limits.h>
+#if !defined(SWIG_NO_LLONG_MAX)
+# if !defined(LLONG_MAX) && defined(__GNUC__) && defined (__LONG_LONG_MAX__)
+#   define LLONG_MAX __LONG_LONG_MAX__
+#   define LLONG_MIN (-LLONG_MAX - 1LL)
+#   define ULLONG_MAX (LLONG_MAX * 2ULL + 1ULL)
+# endif
+#endif
 
 
 #include <float.h>
@@ -2966,20 +2966,6 @@ SWIG_AsVal_int (PyObject * obj, int *val)
     }
   }  
   return res;
-}
-
-
-SWIGINTERN int
-SWIG_AsVal_bool (PyObject *obj, bool *val)
-{
-  int r;
-  if (!PyBool_Check(obj))
-    return SWIG_ERROR;
-  r = PyObject_IsTrue(obj);
-  if (r == -1)
-    return SWIG_ERROR;
-  if (val) *val = r ? true : false;
-  return SWIG_OK;
 }
 
 
@@ -5024,21 +5010,19 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
   string arg1 ;
   uint arg2 ;
   uint arg3 ;
-  int arg4 ;
+  double arg4 ;
   double arg5 ;
   double arg6 ;
   double arg7 ;
-  double arg8 ;
-  int arg9 ;
-  string arg10 ;
-  bool arg11 ;
+  int arg8 ;
+  string arg9 ;
   void *argp1 ;
   int res1 = 0 ;
   void *argp2 ;
   int res2 = 0 ;
   void *argp3 ;
   int res3 = 0 ;
-  int val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
@@ -5046,17 +5030,13 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
   int ecode6 = 0 ;
   double val7 ;
   int ecode7 = 0 ;
-  double val8 ;
+  int val8 ;
   int ecode8 = 0 ;
-  int val9 ;
-  int ecode9 = 0 ;
-  void *argp10 ;
-  int res10 = 0 ;
-  bool val11 ;
-  int ecode11 = 0 ;
+  void *argp9 ;
+  int res9 = 0 ;
   vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > result;
   
-  if ((nobjs < 11) || (nobjs > 11)) SWIG_fail;
+  if ((nobjs < 9) || (nobjs > 9)) SWIG_fail;
   {
     res1 = SWIG_ConvertPtr(swig_obj[0], &argp1, SWIGTYPE_p_std__string,  0  | 0);
     if (!SWIG_IsOK(res1)) {
@@ -5096,11 +5076,11 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
       if (SWIG_IsNewObj(res3)) delete temp;
     }
   }
-  ecode4 = SWIG_AsVal_int(swig_obj[3], &val4);
+  ecode4 = SWIG_AsVal_double(swig_obj[3], &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ppr" "', argument " "4"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ppr" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = static_cast< int >(val4);
+  arg4 = static_cast< double >(val4);
   ecode5 = SWIG_AsVal_double(swig_obj[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "ppr" "', argument " "5"" of type '" "double""'");
@@ -5116,35 +5096,25 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_0(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "ppr" "', argument " "7"" of type '" "double""'");
   } 
   arg7 = static_cast< double >(val7);
-  ecode8 = SWIG_AsVal_double(swig_obj[7], &val8);
+  ecode8 = SWIG_AsVal_int(swig_obj[7], &val8);
   if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "ppr" "', argument " "8"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "ppr" "', argument " "8"" of type '" "int""'");
   } 
-  arg8 = static_cast< double >(val8);
-  ecode9 = SWIG_AsVal_int(swig_obj[8], &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "ppr" "', argument " "9"" of type '" "int""'");
-  } 
-  arg9 = static_cast< int >(val9);
+  arg8 = static_cast< int >(val8);
   {
-    res10 = SWIG_ConvertPtr(swig_obj[9], &argp10, SWIGTYPE_p_std__string,  0  | 0);
-    if (!SWIG_IsOK(res10)) {
-      SWIG_exception_fail(SWIG_ArgError(res10), "in method '" "ppr" "', argument " "10"" of type '" "string""'"); 
+    res9 = SWIG_ConvertPtr(swig_obj[8], &argp9, SWIGTYPE_p_std__string,  0  | 0);
+    if (!SWIG_IsOK(res9)) {
+      SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "ppr" "', argument " "9"" of type '" "string""'"); 
     }  
-    if (!argp10) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ppr" "', argument " "10"" of type '" "string""'");
+    if (!argp9) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ppr" "', argument " "9"" of type '" "string""'");
     } else {
-      string * temp = reinterpret_cast< string * >(argp10);
-      arg10 = *temp;
-      if (SWIG_IsNewObj(res10)) delete temp;
+      string * temp = reinterpret_cast< string * >(argp9);
+      arg9 = *temp;
+      if (SWIG_IsNewObj(res9)) delete temp;
     }
   }
-  ecode11 = SWIG_AsVal_bool(swig_obj[10], &val11);
-  if (!SWIG_IsOK(ecode11)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "ppr" "', argument " "11"" of type '" "bool""'");
-  } 
-  arg11 = static_cast< bool >(val11);
-  result = ppr(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+  result = ppr(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
   resultobj = SWIG_NewPointerObj((new vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >(static_cast< const vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >& >(result))), SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -5963,19 +5933,17 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
   std::string arg1 ;
   unsigned int arg2 ;
   unsigned int arg3 ;
-  int arg4 ;
+  double arg4 ;
   double arg5 ;
   double arg6 ;
   double arg7 ;
-  double arg8 ;
-  int arg9 ;
-  std::string arg10 ;
-  bool arg11 ;
+  int arg8 ;
+  std::string arg9 ;
   unsigned int val2 ;
   int ecode2 = 0 ;
   unsigned int val3 ;
   int ecode3 = 0 ;
-  int val4 ;
+  double val4 ;
   int ecode4 = 0 ;
   double val5 ;
   int ecode5 = 0 ;
@@ -5983,15 +5951,11 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
   int ecode6 = 0 ;
   double val7 ;
   int ecode7 = 0 ;
-  double val8 ;
+  int val8 ;
   int ecode8 = 0 ;
-  int val9 ;
-  int ecode9 = 0 ;
-  bool val11 ;
-  int ecode11 = 0 ;
   std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > > result;
   
-  if ((nobjs < 11) || (nobjs > 11)) SWIG_fail;
+  if ((nobjs < 9) || (nobjs > 9)) SWIG_fail;
   {
     std::string *ptr = (std::string *)0;
     int res = SWIG_AsPtr_std_string(swig_obj[0], &ptr);
@@ -6011,11 +5975,11 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ppr" "', argument " "3"" of type '" "unsigned int""'");
   } 
   arg3 = static_cast< unsigned int >(val3);
-  ecode4 = SWIG_AsVal_int(swig_obj[3], &val4);
+  ecode4 = SWIG_AsVal_double(swig_obj[3], &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ppr" "', argument " "4"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "ppr" "', argument " "4"" of type '" "double""'");
   } 
-  arg4 = static_cast< int >(val4);
+  arg4 = static_cast< double >(val4);
   ecode5 = SWIG_AsVal_double(swig_obj[4], &val5);
   if (!SWIG_IsOK(ecode5)) {
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "ppr" "', argument " "5"" of type '" "double""'");
@@ -6031,31 +5995,21 @@ SWIGINTERN PyObject *_wrap_ppr__SWIG_1(PyObject *SWIGUNUSEDPARM(self), Py_ssize_
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "ppr" "', argument " "7"" of type '" "double""'");
   } 
   arg7 = static_cast< double >(val7);
-  ecode8 = SWIG_AsVal_double(swig_obj[7], &val8);
+  ecode8 = SWIG_AsVal_int(swig_obj[7], &val8);
   if (!SWIG_IsOK(ecode8)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "ppr" "', argument " "8"" of type '" "double""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode8), "in method '" "ppr" "', argument " "8"" of type '" "int""'");
   } 
-  arg8 = static_cast< double >(val8);
-  ecode9 = SWIG_AsVal_int(swig_obj[8], &val9);
-  if (!SWIG_IsOK(ecode9)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode9), "in method '" "ppr" "', argument " "9"" of type '" "int""'");
-  } 
-  arg9 = static_cast< int >(val9);
+  arg8 = static_cast< int >(val8);
   {
     std::string *ptr = (std::string *)0;
-    int res = SWIG_AsPtr_std_string(swig_obj[9], &ptr);
+    int res = SWIG_AsPtr_std_string(swig_obj[8], &ptr);
     if (!SWIG_IsOK(res) || !ptr) {
-      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ppr" "', argument " "10"" of type '" "std::string""'"); 
+      SWIG_exception_fail(SWIG_ArgError((ptr ? res : SWIG_TypeError)), "in method '" "ppr" "', argument " "9"" of type '" "std::string""'"); 
     }
-    arg10 = *ptr;
+    arg9 = *ptr;
     if (SWIG_IsNewObj(res)) delete ptr;
   }
-  ecode11 = SWIG_AsVal_bool(swig_obj[10], &val11);
-  if (!SWIG_IsOK(ecode11)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode11), "in method '" "ppr" "', argument " "11"" of type '" "bool""'");
-  } 
-  arg11 = static_cast< bool >(val11);
-  result = ppr(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9,arg10,arg11);
+  result = ppr(arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9);
   resultobj = SWIG_NewPointerObj((new std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >(static_cast< const std::vector< std::vector< double,std::allocator< double > >,std::allocator< std::vector< double,std::allocator< double > > > >& >(result))), SWIGTYPE_p_std__vectorT_std__vectorT_double_std__allocatorT_double_t_t_std__allocatorT_std__vectorT_double_std__allocatorT_double_t_t_t_t, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
@@ -6065,13 +6019,13 @@ fail:
 
 SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
   Py_ssize_t argc;
-  PyObject *argv[12] = {
+  PyObject *argv[10] = {
     0
   };
   
-  if (!(argc = SWIG_Python_UnpackTuple(args, "ppr", 0, 11, argv))) SWIG_fail;
+  if (!(argc = SWIG_Python_UnpackTuple(args, "ppr", 0, 9, argv))) SWIG_fail;
   --argc;
-  if (argc == 11) {
+  if (argc == 9) {
     int _v = 0;
     int res = SWIG_ConvertPtr(argv[0], 0, SWIGTYPE_p_std__string, SWIG_POINTER_NO_NULL | 0);
     _v = SWIG_CheckState(res);
@@ -6083,7 +6037,7 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
         _v = SWIG_CheckState(res);
         if (_v) {
           {
-            int res = SWIG_AsVal_int(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -6103,26 +6057,14 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
                 }
                 if (_v) {
                   {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
+                    int res = SWIG_AsVal_int(argv[7], NULL);
                     _v = SWIG_CheckState(res);
                   }
                   if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
+                    int res = SWIG_ConvertPtr(argv[8], 0, SWIGTYPE_p_std__string, SWIG_POINTER_NO_NULL | 0);
+                    _v = SWIG_CheckState(res);
                     if (_v) {
-                      int res = SWIG_ConvertPtr(argv[9], 0, SWIGTYPE_p_std__string, SWIG_POINTER_NO_NULL | 0);
-                      _v = SWIG_CheckState(res);
-                      if (_v) {
-                        {
-                          int res = SWIG_AsVal_bool(argv[10], NULL);
-                          _v = SWIG_CheckState(res);
-                        }
-                        if (_v) {
-                          return _wrap_ppr__SWIG_0(self, argc, argv);
-                        }
-                      }
+                      return _wrap_ppr__SWIG_0(self, argc, argv);
                     }
                   }
                 }
@@ -6133,7 +6075,7 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
       }
     }
   }
-  if (argc == 11) {
+  if (argc == 9) {
     int _v = 0;
     int res = SWIG_AsPtr_std_string(argv[0], (std::string**)(0));
     _v = SWIG_CheckState(res);
@@ -6149,7 +6091,7 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
         }
         if (_v) {
           {
-            int res = SWIG_AsVal_int(argv[3], NULL);
+            int res = SWIG_AsVal_double(argv[3], NULL);
             _v = SWIG_CheckState(res);
           }
           if (_v) {
@@ -6169,26 +6111,14 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
                 }
                 if (_v) {
                   {
-                    int res = SWIG_AsVal_double(argv[7], NULL);
+                    int res = SWIG_AsVal_int(argv[7], NULL);
                     _v = SWIG_CheckState(res);
                   }
                   if (_v) {
-                    {
-                      int res = SWIG_AsVal_int(argv[8], NULL);
-                      _v = SWIG_CheckState(res);
-                    }
+                    int res = SWIG_AsPtr_std_string(argv[8], (std::string**)(0));
+                    _v = SWIG_CheckState(res);
                     if (_v) {
-                      int res = SWIG_AsPtr_std_string(argv[9], (std::string**)(0));
-                      _v = SWIG_CheckState(res);
-                      if (_v) {
-                        {
-                          int res = SWIG_AsVal_bool(argv[10], NULL);
-                          _v = SWIG_CheckState(res);
-                        }
-                        if (_v) {
-                          return _wrap_ppr__SWIG_1(self, argc, argv);
-                        }
-                      }
+                      return _wrap_ppr__SWIG_1(self, argc, argv);
                     }
                   }
                 }
@@ -6203,8 +6133,8 @@ SWIGINTERN PyObject *_wrap_ppr(PyObject *self, PyObject *args) {
 fail:
   SWIG_Python_RaiseOrModifyTypeError("Wrong number or type of arguments for overloaded function 'ppr'.\n"
     "  Possible C/C++ prototypes are:\n"
-    "    ppr(string,uint,uint,int,double,double,double,double,int,string,bool)\n"
-    "    ppr(std::string,unsigned int,unsigned int,int,double,double,double,double,int,std::string,bool)\n");
+    "    ppr(string,uint,uint,double,double,double,double,int,string)\n"
+    "    ppr(std::string,unsigned int,unsigned int,double,double,double,double,int,std::string)\n");
   return 0;
 }
 

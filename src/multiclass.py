@@ -17,7 +17,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--dataset', type=str, default="cora",help='Dataset to use.')
 parser.add_argument('--seed', type=int, default=51290, help='Random seed.')
 
-parser.add_argument('--type', type=int, default=0, help='the type of the split')
+parser.add_argument('--type', type=int, default=3, help='the type of the split')
 
 parser.add_argument('--epochs', type=int, default=1000, help='Number of epochs to train.')
 parser.add_argument('--patience', type=int, default=100, help='Number of epochs to train.')
@@ -29,6 +29,12 @@ parser.add_argument('--nlayers', type=int, default=2, help='Number of hidden lay
 parser.add_argument('--bias', default='none', help='bias.')
 parser.add_argument('--batch', type=int, default=64, help='batch size')
 parser.add_argument('--dropout', type=float, default=0.5, help='Dropout rate (1 - keep probability).')
+
+parser.add_argument('--omega', type=float, default=1, help='omega value')
+parser.add_argument('--tau', type=float, default=1, help='neighbor range tau')
+parser.add_argument('--epsilon', type=float, default=0.01, help='size of selected neighbors')
+parser.add_argument('--rho', type=float, default=1, help='the power index')
+'''
 parser.add_argument('--alpha', type=float, default=0.1, help='stop probability at each step')
 parser.add_argument('--lamb', type=float, default=0, help='lambda value')
 parser.add_argument('--epsilon', type=float, default=0.01, help='residual pagerank value')
@@ -36,7 +42,7 @@ parser.add_argument('--rr', type=float, default=0.5, help='the power index of D'
 parser.add_argument('--level', type=int, default=6, help='the maximum level')
 parser.add_argument('--no-opt', dest='opt', action='store_false', help='Lazy update optimization')
 parser.set_defaults(opt=True)
-
+'''
 args = parser.parse_args()
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -78,13 +84,13 @@ def test():
         micro_test = muticlass_f1(output, label_valtest[len_val:])
         return micro_test.item()    
 
-
+print('Node wise version 1.0')
 settings=['_5_125_250', '_10_250_500', '_15_375_750', '_20_500_1000']
 training_time=[]
 test_f1score=[]
 for idx in range(10):
     splitfile = settings[args.type] + '_' + str(idx) + '_splits.npz'
-    feature_train, feature_valtest, label_train, label_valtest, len_val = load_inductive(args.dataset, args.lamb, args.alpha, args.epsilon, args.level, args.rr, args.opt, splitfile)
+    feature_train, feature_valtest, label_train, label_valtest, len_val = load_inductive(args.dataset, args.omega, args.tau, args.epsilon, args.rho, splitfile)
 
     checkpt_file = 'pretrained/'+uuid.uuid4().hex+'.pt'
 

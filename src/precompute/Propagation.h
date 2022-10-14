@@ -5,6 +5,6 @@
 #include <string>
 using namespace std;
 
-vector<vector<double>> ppr(string data, uint nn, uint mm, int level, double lambda, double alpha, double epsilon, double rrr, int size, string TS, bool opt);
+vector<vector<double>> ppr(string data, uint nn, uint mm, double ome, double tau1, double eps, double rho1, int size, string TS);
 
 #endif

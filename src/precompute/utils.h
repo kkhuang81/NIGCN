@@ -4,6 +4,10 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+//#include <random>
+//#include <stdlib.h>
+//#include <queue>
+//#include <unordered_map>
 #include <math.h>
 #include <cmath>
 #include <limits.h>
@@ -50,6 +54,7 @@ public:
     HashValue = new int[bit_vert];
     
     for (int i = 0; i < vert; i++) {
+      //HashKey[i] = 0;  //not necessary neither
       weight[i] = 0.0;
     }
     
@@ -66,6 +71,7 @@ public:
       HashKey[KeyNumber] = node;
       KeyNumber++;      
       SetBit(HashValue, node);
+      //weight[node] = 0.0;
     }    
     weight[node] += w;
   }
@@ -79,6 +85,7 @@ public:
       ClearBit(HashValue, k);
       double w = weight[k];
       weight[k] = 0.0;
+      //KeyNumber--;
       return make_pair(k, w);
     }
   }
@@ -86,10 +93,41 @@ public:
   void Clean() {
     for (int i = 0; i < KeyNumber; i++) {
       ClearBit(HashValue, HashKey[i]);
+      //HashKey[i] = 0; //This line of code is unnecessary
       weight[i] = 0.0;
     }
     KeyNumber = 0;
   }
+  /*
+  ~Node_Set() {
+    delete[] HashKey;
+    delete[] HashValue;  
+    delete[] weight;
+  }
+  */
 };
+
+/*
+inline double dist(double *s, vector<double>& t, double sumt)
+{
+    double dis = 0., tep = 0.0;
+    int len = t.size();
+    for (int i = 0;i < len;i++)
+    {        
+        tep = s[i] - t[i] / sumt;
+        dis += tep * tep;
+    }        
+    //return sqrt(dis);
+    return dis;
+}
+*/
+
+/*
+inline vectoradd(vector<double>& s, vector<double>& t)
+{
+    transform(s.begin(), s.end(), t.begin(),
+        s.begin(), plus<double>());
+}
+*/
 
 #endif

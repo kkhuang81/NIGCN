@@ -1,4 +1,4 @@
-# Effective and Scalable Graph Neural Networks for Semi-supervised Classification
+# Node-wise Diffusion for Scalable Graph Learning
 
 This repository contains the codes of GTR and GTRO, data process, and split generation codes.
 
@@ -22,8 +22,4 @@ make
 ```
 ## Running the code
 
-Folder ``run_scripts`` contains the script to run GTO and GTRO for each datasets. 
-
-By default, the codes run as GTRO.  
-
-Adding ``--no-opt`` option in command would disable the optimization, thus run as GTR. 
+Folder ``run_scripts`` contains the script to run NIGCN for each datasets.  

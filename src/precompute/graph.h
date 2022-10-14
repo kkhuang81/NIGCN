@@ -12,43 +12,45 @@ public:
     long long  m;    
     vector<uint> el;
     vector<uint> pl;
-    int level;
     int NUMTHREAD;
-    double lambda;
-    double alpha;
+    double omega;
     double epsilon;    
-    double rrr;      
-    double wgtsum;
+    double rho;   
+    double LnSqrtAvgDeg;  
+    double tau; 
+    double dmin;
     vector<int>targetset;
     int setSize, ncols;
     uint nrows;
     vector<vector<double>> feature;
     vector<vector<double>> newFeat;        
     vector<double> weights;
+    double wsum;
     uint rwsize;
 
-    vector<int>deg;
-    string dataset;        
+    int maxlevel;
 
-    Graph(string dataStr, uint nn, uint mm, int thrdnum, int Lel, double lamb, double alph, double eps, double rrz, int size, string TS)
+    vector<int>deg;
+    string dataset;    
+
+    Graph(string dataStr, uint nn, uint mm, int thrdnum, double ome, double tau1, double eps, double rho1, int size, string TS)
     {
         dataset = dataStr;
-        level = Lel;
         NUMTHREAD = thrdnum;
-        lambda = lamb;
-        alpha = alph;
+        omega = ome;
         epsilon = eps;
-        rrr = rrz;
+        tau = tau1;
+        rho = rho1;
         n = nn;
         m = mm;
+        maxlevel = 0;
         el = vector<uint>(m);
         pl = vector<uint>(n + 1);
-        
         LoadGraph();
         if (dataStr.find("papers100M") != string::npos)LoadPapersFeatures();
-        else LoadFeatures();
-        
-        setSize = size;        
+        else LoadFeatures();      
+        setSize = size;
+        LnSqrtAvgDeg = log(sqrt(2*double (m) / double (n)));
         string s;
         int i = 0;       
 
@@ -60,37 +62,28 @@ public:
             ssin >> s;
             targetset[i++] = stoi(s);
         }  
-        weights = vector<double>(level+1, 0);
-        
-        if (lambda < 1.0)        
-        {        
-            weights[0] = alpha;
-            wgtsum = weights[0];
-            for (int i = 1;i <= level;i++)
-            {
-                weights[i] = weights[i - 1] * (1 - alpha);
-                wgtsum += weights[i];
-            }
-        }                
-        else
-        {            
-            weights[0] = exp(-lambda);            
-            wgtsum = weights[0];
-            for (int i = 1;i <= level;i++)
-            {
-                weights[i] = weights[i - 1] * lambda / (double)i;
-                wgtsum += weights[i];
-            }         
-        }
-        cout << "required neighbor no.: " << 1.0 / epsilon / epsilon << endl;
-        cout << "Wgtsum.: " << wgtsum << endl;
-        double delta = 0.01;        
-	    rwsize = 8.0 * log(wgtsum / epsilon / delta) / epsilon + 1; //failure probability 1%
+        int level = 512;
+        weights = vector<double>(level, 0);
+        weights[0] = 1.0;            
+        wsum = weights[0];
+
+        for (int i = 1;i < level;i++)
+        {
+            weights[i] = weights[i - 1] * omega / pow((double)i, rho);
+            wsum += weights[i];
+        }        
+
+        //cout << "required neighbor no.: " << 1.0 / epsilon / epsilon << endl;
+        //cout << "Wgtsum.: " << wgtsum << endl;
+        double delta = 0.01;
+        //rwsize = 2.0 * log(wgtsum / epsilon / delta) / epsilon / epsilon + 1; //failure probability 1%
+	    rwsize = 8.0 * log(1.0 / epsilon / delta) / epsilon + 1; //failure probability 1%
         cout << "random walk size: " << rwsize << " node num:" << n << endl;
     }
 
     void LoadGraph()
-    {                
+    {        
+        //cout << "path: " << dataset << endl;
         string dataset_el = dataset + "_adj_el.txt";
         const char* p1 = dataset_el.c_str();
         if (FILE* f1 = fopen(p1, "rb"))
@@ -119,17 +112,25 @@ public:
         {
             cout << dataset_pl << " Not Exists." << endl;
             exit(1);
-        }        
+        }
+        //cout << "Load finished" << endl;
+        
+        dmin=n;
         deg = vector<int>(n, 0);
         for (uint i = 0;i < n;i++)
+        {
             deg[i] = pl[i + 1] - pl[i];        
+            dmin = min(dmin, 1.0*deg[i]);
+        }
+        dmin=max(1.0, dmin);            
     }
 
     void LoadFeatures(){
         cnpy::NpyArray arr_mv1 = cnpy::npy_load( dataset +"_feat.npy");
         auto mv1 = arr_mv1.data<double>();
         nrows = arr_mv1.shape [0];
-        ncols = arr_mv1.shape [1];        
+        ncols = arr_mv1.shape [1];
+        //cout << "nrow: " << nrows << " cols: " << ncols << endl;
         feature = vector<vector<double>>(nrows,vector<double>(ncols));       
         for(uint row = 0; row <nrows; row ++){
             for(int col = 0; col <ncols; col ++){
@@ -137,19 +138,12 @@ public:
                 feature[row][col] = val;
             }
         }        
-
-        for (uint i = 0; i < nrows; i++)
-        {
-            double d = pow((double)deg[i], rrr);
-            if (d == 0.0) continue;             
-            transform(feature[i].begin(), feature[i].end(), feature[i].begin(), bind1st(multiplies<double>(), 1.0 / d));
-        }                          
     }
     
     void LoadPapersFeatures() {
         nrows = 111059956;
         ncols = 128;
-        feature = vector<vector<double>>(nrows, vector<double>(ncols));        
+        feature = vector<vector<double>>(nrows, vector<double>(ncols));
 
         string dataset_feat = dataset + "_feat.txt";
         const char* p3 = dataset_feat.c_str();
@@ -171,13 +165,6 @@ public:
         {
             cout << dataset_feat << " Not Exists." << endl;
             exit(1);
-        }
-        double d = 0.0;
-        for (uint i = 0; i < nrows; i++)
-        {
-            if (deg[i] == 0) continue;
-            d = pow((double)deg[i], rrr);
-            for (int j = 0;j < ncols;j++)feature[i][j] /= d;
         }
         cout << "Papers100M feature Loaded" << endl;
     }
