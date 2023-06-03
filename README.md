@@ -1,6 +1,6 @@
 # Node-wise Diffusion for Scalable Graph Learning
 
-This repository contains the codes of NIGCN, data process, and split generation codes.
+This repository contains the codes of NIGCN, data process, and split generation codes. For detailed information about NIGCN, please refer to the paper https://arxiv.org/abs/2305.14000.
 
 ## Requirements
 - CUDA 10.1.243
